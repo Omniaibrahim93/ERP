@@ -2,9 +2,18 @@
 version: '3.8'
 
 services:
+  ollama:
+    image: ollama/ollama
+    container_name: erp-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    command: ["/bin/bash", "-c", "ollama pull llama3 && ollama serve"]
+
   erp-agent:
     build: .
-    container_name: erp-agent
+    container_name: erp-agent-v3
     ports:
       - "8000:8000"
       - "8501:8501"
@@ -12,3 +21,8 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
+    depends_on:
+      - ollama
+
+volumes:
+  ollama_data:
