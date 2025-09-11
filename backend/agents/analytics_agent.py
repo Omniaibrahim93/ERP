@@ -37,7 +37,7 @@ class AnalyticsAgent:
 
         self.prompt = PromptTemplate.from_template(analytics_prompt_template)
         self.agent = create_react_agent(llm, self.langchain_tools, self.prompt)
-        self.executor = AgentExecutor(agent=self.agent, tools=self.langchain_tools, verbose=True)
+        self.executor = AgentExecutor(agent=self.agent, tools=self.langchain_tools, verbose=True,handle_parsing_errors=True)
 
     def run(self, user_prompt: str, memory_context: dict) -> str:
         return self.executor.invoke({"input": user_prompt, "history": memory_context.get("history", "")})['output']

@@ -15,7 +15,7 @@ base_url = os.getenv("OLLAMA_API_BASE", "http://localhost:11434")
 
 llm = OllamaLLM(
     model="llama3",
-    base_url=base_url
+    base_url="http://localhost:11434/"
 )
 
 

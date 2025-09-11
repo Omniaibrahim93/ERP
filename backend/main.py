@@ -1,8 +1,11 @@
 # backend/main.py
 
 from fastapi import FastAPI
+# from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain.memory import ConversationBufferWindowMemory
+from starlette.middleware.cors import CORSMiddleware
+
 from backend.agents.router_agent import RouterAgent
 from backend.agents.sales_agent import SalesAgent
 from backend.agents.analytics_agent import AnalyticsAgent
@@ -14,6 +17,15 @@ from backend.agents.inventory_agent import InventoryAgent
 
 # Initialize FastAPI application
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Initialize all agents and a shared memory buffer
 router_agent = RouterAgent()

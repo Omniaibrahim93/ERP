@@ -5,7 +5,6 @@ from langchain.tools import Tool as LangChainTool
 
 from .tools import mcp_registry, llm
 
-
 prompt_template = """
 You are a central routing agent for an ERP system. Your task is to analyze a user's request and determine which specialized agent can best handle it.
 
@@ -44,7 +43,8 @@ class RouterAgent:
             self.prompt
         )
 
-        self.executor = AgentExecutor(agent=self.agent, tools=[self.langchain_tool], verbose=True)
+        self.executor = AgentExecutor(agent=self.agent, tools=[self.langchain_tool], verbose=True,
+                                      handle_parsing_errors=True)
 
     def route_request(self, user_prompt: str) -> str:
         response = self.executor.invoke({"input": user_prompt})

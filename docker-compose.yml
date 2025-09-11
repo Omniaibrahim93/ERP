@@ -1,17 +1,4 @@
 services:
-  ollama:
-    image: ollama/ollama
-    container_name: erp-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ~/.ollama:/root/.ollama
-    command: serve
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   erp-agent:
     build: .
@@ -23,12 +10,25 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
-      - OLLAMA_API_BASE=http://erp-ollama:11434
-    depends_on:
-      - ollama
+#    depends_on:
+#      - ollama
 volumes:
   ollama:
 
+
+#  ollama:
+#    image: ollama/ollama
+#    container_name: erp-ollama
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ~/.ollama:/root/.ollama
+#    command: serve
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
 
 #services:
 #  ollama:
