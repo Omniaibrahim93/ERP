@@ -1,6 +1,3 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   ollama:
     image: ollama/ollama
@@ -8,8 +5,13 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ollama_data:/root/.ollama
-    command: ["/bin/bash", "-c", "ollama pull llama3 && ollama serve"]
+      - ~/.ollama:/root/.ollama
+    command: serve
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   erp-agent:
     build: .
@@ -21,8 +23,51 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - OLLAMA_API_BASE=http://erp-ollama:11434
     depends_on:
       - ollama
-
 volumes:
-  ollama_data:
+  ollama:
+
+
+#services:
+#  ollama:
+#    image: ollama/ollama
+#    container_name: erp-ollama
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ~/.ollama:/root/.ollama  # Use host's Ollama directory
+#    command: serve
+##    volumes:
+##      - ollama_data:/root/.ollama
+##    # Remove the pull command from here - do it separately
+##    command: serve
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#  erp-agent:
+#    build: .
+#    container_name: erp-agent-v3
+#    ports:
+#      - "8000:8000"
+#      - "8501:8501"
+#    volumes:
+#      - .:/app
+#    environment:
+#      - PYTHONUNBUFFERED=1
+##      - OLLAMA_API_BASE=http://erp-ollama:11434
+#    depends_on:
+#      - ollama
+#    # Add healthcheck and better startup handling
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#
+#volumes:
+#  ollama_data:

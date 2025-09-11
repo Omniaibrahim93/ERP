@@ -2,12 +2,15 @@
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from agents.router_agent import RouterAgent
-from agents.sales_agent import SalesAgent
-from agents.analytics_agent import AnalyticsAgent
-from agents.finance_agent import FinanceAgent
-from agents.inventory_agent import InventoryAgent  # تم إضافة وكيل المخزون
 from langchain.memory import ConversationBufferWindowMemory
+from backend.agents.router_agent import RouterAgent
+from backend.agents.sales_agent import SalesAgent
+from backend.agents.analytics_agent import AnalyticsAgent
+from backend.agents.finance_agent import FinanceAgent
+from backend.agents.inventory_agent import InventoryAgent
+
+
+# from agents import RouterAgent, SalesAgent, AnalyticsAgent, FinanceAgent, InventoryAgent
 
 # Initialize FastAPI application
 app = FastAPI()

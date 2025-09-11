@@ -1,16 +1,18 @@
 # agents/router_agent.py
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.prompts import PromptTemplate
-from langchain_community.llms import Ollama
-from langchain_community.tools.base import Tool as LangChainTool
-from tools.mcp_registry import mcp_registry
+from langchain.tools import Tool as LangChainTool
 
-llm = Ollama(model="llama3")
+from .tools import mcp_registry, llm
+
 
 prompt_template = """
 You are a central routing agent for an ERP system. Your task is to analyze a user's request and determine which specialized agent can best handle it.
 
-You have access to the 'intent_classifier' tool to help you.
+You have access to the following tools:
+{tools}
+
+Tool names you can call: {tool_names}
 
 Available Agents:
 - sales_agent: Handles customers, leads, and orders.
@@ -18,11 +20,14 @@ Available Agents:
 - finance_agent: Manages invoices and financial transactions.
 - inventory_agent: Controls stock levels and supplier orders.
 
-Use the tool to classify the request and then state the name of the appropriate agent.
+When responding, reason step by step. 
+First, use the intent_classifier tool if necessary. 
+Then, decide the most appropriate agent.
 
 Human: {input}
-AI:
+AI (scratchpad): {agent_scratchpad}
 """
+
 
 class RouterAgent:
     def __init__(self):
@@ -33,7 +38,12 @@ class RouterAgent:
             description=self.classifier_tool.description
         )
         self.prompt = PromptTemplate.from_template(prompt_template)
-        self.agent = create_react_agent(llm, [self.langchain_tool], self.prompt)
+        self.agent = create_react_agent(
+            llm,
+            [self.langchain_tool],
+            self.prompt
+        )
+
         self.executor = AgentExecutor(agent=self.agent, tools=[self.langchain_tool], verbose=True)
 
     def route_request(self, user_prompt: str) -> str:
