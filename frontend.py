@@ -2,11 +2,10 @@
 
 import streamlit as st
 import requests
+import os
 
-# Define the backend API URL
-# API_URL = "http://localhost:8000/chat/"
-API_URL = "http://127.0.0.1:8000/chat/"
-
+# Define the backend API URL - use environment variable for Docker compatibility
+API_URL = os.getenv("API_URL", "http://localhost:8000/chat/")
 
 st.set_page_config(page_title="Helios Dynamics - Agent-Driven ERP", layout="wide")
 st.title("💡 Helios Dynamics Agent-Driven ERP")

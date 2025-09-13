@@ -2,8 +2,14 @@
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.prompts import PromptTemplate
 from langchain.tools import Tool as LangChainTool
-from .tools import mcp_registry, llm
+from langchain_community.llms import Ollama
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+from tools.mcp_registry import mcp_registry
+from config import OLLAMA_BASE_URL
 
+llm = Ollama(model="llama3", base_url=OLLAMA_BASE_URL)
 
 analytics_prompt_template = """
 You are a specialized agent in analytics and reporting. Your task is to answer questions using data from the ERP system.

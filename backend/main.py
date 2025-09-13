@@ -12,6 +12,13 @@ from backend.agents.analytics_agent import AnalyticsAgent
 from backend.agents.finance_agent import FinanceAgent
 from backend.agents.inventory_agent import InventoryAgent
 
+# Import all tools to register them
+import tools.classifier
+import tools.sales_sql
+import tools.analytics_sql
+import tools.finance_sql
+import tools.inventory_sql
+
 
 # from agents import RouterAgent, SalesAgent, AnalyticsAgent, FinanceAgent, InventoryAgent
 

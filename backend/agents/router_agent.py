@@ -2,8 +2,14 @@
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.prompts import PromptTemplate
 from langchain.tools import Tool as LangChainTool
+from langchain_community.llms import Ollama
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+from tools.mcp_registry import mcp_registry
+from config import OLLAMA_BASE_URL
 
-from .tools import mcp_registry, llm
+llm = Ollama(model="llama3", base_url=OLLAMA_BASE_URL)
 
 prompt_template = """
 You are a central routing agent for an ERP system. Your task is to analyze a user's request and determine which specialized agent can best handle it.
